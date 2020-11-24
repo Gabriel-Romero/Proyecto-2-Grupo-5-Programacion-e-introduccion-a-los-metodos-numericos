@@ -3,6 +3,7 @@ epidemia con respecto a diferentes parámetros que podrán ser controlados
 por el usuario por medio de deslizadores como el mostrado a continuación"""
 
 import pygame, sys, random, math
+import matplotlib as plt
 from pygame_widgets import *
 from pygame.locals import *
 
@@ -10,9 +11,10 @@ from pygame.locals import *
 
 pygame.init()
 FPS = pygame.time.Clock()
-num_fps = 60
-X = 1000
-Y = 650
+num_fps = 30
+X = 1080
+Y = 720
+pygame.display.set_caption("Simulacion de una epidemia")
 radio_circulo = 5
 densidad = 1
 ProbabilidadDeContagio = 0.01
@@ -27,7 +29,7 @@ sanos = []
 contagiadosvisibles=[]
 contagiadosnovisibles=[]
 retirados=[]
-font=pygame.font.Font("Louis George Cafe.ttf",16)
+font=pygame.font.SysFont("Louis George Cafe.ttf",16)
 
 class Circulo:
     def __init__(self):      # definir círculos
@@ -86,15 +88,15 @@ def dibujar():  # mostrar círculos
     Sanos_pos=Sanos.get_rect()
     Sanos_pos.bottomleft=(20,100)         
     pantalla.blit(Sanos,Sanos_pos)
-    I = font.render('Hay %s personas enfermas' % len(contagiadosvisibles+contagiadosnovisibles), True,(0,255,0), (0,0,0))
+    I = font.render('Hay %s personas contagiadas:' % len(contagiadosvisibles+contagiadosnovisibles), True,(0,255,0), (0,0,0))
     I_pos=I.get_rect()
     I_pos.bottomleft=(20,120)       
     pantalla.blit(I,I_pos)
-    IV = font.render('%s visiblemente' % len(contagiadosvisibles), True,(255,0,0), (0,0,0))
+    IV = font.render('%s presentan sintomas' % len(contagiadosvisibles), True,(255,0,0), (0,0,0))
     IV_pos=IV.get_rect()
     IV_pos.bottomleft=(30,140)       
     pantalla.blit(IV,IV_pos)
-    INV = font.render('%s asimptomaticamente' % len(contagiadosnovisibles), True,(255,255,40), (0,0,0))
+    INV = font.render('%s son asintomaticos' % len(contagiadosnovisibles), True,(255,255,40), (0,0,0))
     INV_pos=INV.get_rect()
     INV_pos.bottomleft=(30,160)       
     pantalla.blit(INV,INV_pos)
@@ -104,6 +106,12 @@ def dibujar():  # mostrar círculos
         pygame.draw.circle(pantalla,c.color,(int(c.x),int(c.y)),c.r)
     pygame.display.flip()
     FPS.tick(num_fps)
+    
+    grafico = plt.plot(contagiadosvisibles, contagiadosnovisibles)
+    grafico_pos=grafico.rect()
+    grafico_pos.topleft=(80,160)
+    pantalla.blit(grafico, grafico_pos)
+    
 
 def finalizar():             # revisar si se debe finalizar la simulación
     acciones = pygame.event.get()
