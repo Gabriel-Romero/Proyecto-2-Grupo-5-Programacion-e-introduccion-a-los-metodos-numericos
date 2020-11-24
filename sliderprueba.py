@@ -120,7 +120,10 @@ while True:
     for s in slides:
         s.draw()
     
-    print(pos)
+    I = font.render('velocidad= %s ' % velocidad.val, True,(0,0,0), (255,255,250))
+    I_pos=I.get_rect()
+    I_pos.bottomleft=(20,120) 
+    screen.blit(I,I_pos)
 
     pygame.display.flip()
     clock.tick(velocidad.val)
