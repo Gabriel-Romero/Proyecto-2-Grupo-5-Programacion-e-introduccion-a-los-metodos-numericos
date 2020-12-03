@@ -4,6 +4,8 @@ por el usuario por medio de deslizadores como el mostrado a continuación"""
 
 import pygame, sys, random, math
 import matplotlib as plt
+import matplotlib.backends.backend_agg as agg
+import pylab
 from pygame_widgets import *
 from pygame.locals import *
 
@@ -17,7 +19,7 @@ Y = 720
 pygame.display.set_caption("Simulacion de una epidemia")
 radio_circulo = 5
 densidad = 1
-ProbabilidadDeContagio = 0.01
+ProbabilidadDeContagio = 0.03
 TamañoDeLaPoblacion = 250
 porcentajeinicialinf= 0.04
 porcentajeasimptomatico=0.8
@@ -29,6 +31,10 @@ sanos = []
 contagiadosvisibles=[]
 contagiadosnovisibles=[]
 retirados=[]
+Num_sanos=[]
+Num_enfermos=[]
+Num_retirados=[]
+fig = pylab.figure(figsize=[3, 3], dpi=100,)
 font=pygame.font.SysFont("Louis George Cafe.ttf",16)
 
 class Circulo:
@@ -39,7 +45,8 @@ class Circulo:
         self.velx = ((random.randint(1,10)/10)*(-1)**random.randint(0,1))
         self.vely = ((random.randint(1,10)/10)*(-1)**random.randint(0,1))
         self.color = (255,255,255)
-        self.MomentoDeContagio = None
+        self.TiempoDeContagio = 0
+        self.retiro= random.randint(35000,40000)
 
 for i in range(TamañoDeLaPoblacion-int(TamañoDeLaPoblacion*porcentajeinicialinf)):
     sanos.append(Circulo())
@@ -48,13 +55,26 @@ for i in range(int(TamañoDeLaPoblacion*porcentajeinicialinf)):
  if i <= int(TamañoDeLaPoblacion*porcentajeinicialinf*porcentajeasimptomatico):
    contagiadosnovisibles.append(Circulo())
    contagiadosnovisibles[i].color=(255,255,40)
+    contagiadosnovisibles[i].TiempoDeContagio=pygame.time.get_ticks()
  else: 
    contagiadosvisibles.append(Circulo())
    contagiadosvisibles[i-int(TamañoDeLaPoblacion*porcentajeinicialinf*porcentajeasimptomatico)-1].color=(255,0,0)
-   
+   contagiadosvisibles[i-int(TamañoDeLaPoblacion*porcentajeinicialinf*porcentajeasimptomatico)-1].TiempoDeContagio=pygame.time.get_ticks()
  
 
 def infeccion():
+    for inf in contagiadosvisibles:
+        if pygame.time.get_ticks()-inf.TiempoDeContagio>inf.retiro:
+            inf.color=(110,110,110)
+            retirados.append(inf)
+            contagiadosvisibles.remove(inf)
+            
+    for inf in contagiadosnovisibles:
+        if pygame.time.get_ticks()-inf.TiempoDeContagio>inf.retiro:
+            inf.color=(110,110,110)
+            retirados.append(inf)
+            contagiadosnovisibles.remove(inf)
+            
     for inf in contagiadosvisibles+contagiadosnovisibles:
         for san in reversed(sanos):
            if ((inf.x-san.x)**2+(inf.y-san.y)**2)**0.5<radiocontagio :
@@ -100,18 +120,16 @@ def dibujar():  # mostrar círculos
     INV_pos=INV.get_rect()
     INV_pos.bottomleft=(30,160)       
     pantalla.blit(INV,INV_pos)
+    R = font.render('%s personas han sido retiradas' % len(retirados), True,(110,110,110), (0,0,0))
+    R_pos=R.get_rect()
+    R_pos.bottomleft=(20,180)       
+    pantalla.blit(R,R_pos)
     for i in contagiadosvisibles+contagiadosnovisibles:
         pygame.draw.circle(pantalla,(5, 153, 29),(int(i.x),int(i.y)),radiocontagio)
     for c in sanos+contagiadosvisibles+contagiadosnovisibles+retirados:
         pygame.draw.circle(pantalla,c.color,(int(c.x),int(c.y)),c.r)
     pygame.display.flip()
-    FPS.tick(num_fps)
-    
-    grafico = plt.plot(contagiadosvisibles, contagiadosnovisibles)
-    grafico_pos=grafico.rect()
-    grafico_pos.topleft=(80,160)
-    pantalla.blit(grafico, grafico_pos)
-    
+    FPS.tick(num_fps)  
 
 def finalizar():             # revisar si se debe finalizar la simulación
     acciones = pygame.event.get()
