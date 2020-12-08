@@ -91,6 +91,7 @@ def infeccion():
         for san in reversed(sanos):
            if ((inf.x-san.x)**2+(inf.y-san.y)**2)**0.5<radiocontagio :
                if random.randint(1,100)<=100*ProbabilidadDeContagio:
+                  san.TiempoDeContagio=pygame.time.get_ticks()  
                   if random.randint(1,100)<=100*porcentajeasimptomatico: 
                     san.color=(255,255,40)
                     contagiadosnovisibles.append(san)
