@@ -1,3 +1,6 @@
 # Proyecto-2-Grupo-5-Programacion-e-introduccion-a-los-metodos-numericos
-# En este segundo proyecto se hará una simulación simple a pequeña escala de diferentes modelos de contagio de una enfermedad según factores como tasa de contagio, mortalidad, tiempo de recuperamiento, aislamiento,etc
 # Grupo conformado por David Aparicio, Pedro Jaramillo, Juliana Marquez y Gabriel Romero
+
+El objetivo de este proyecto, es el de crear un programa que sea capaz de simular el comportamiento de una poblacion de cierto tamaño, durante el brote de una enfermedad infecciosa, teniendo en cuenta aspectos como la probabilidad de contagio, el tamaño de la poblacion, las medidas de prevencion de contagio, entre otras, para asi poder simular lo que sucederia con la poblacion segun las condiciones dadas.
+
+El programa consiste de ademas, de una seccion donde se muestran los numeros de infectados, sanos y removidos de la poblacion y una tabla que muestra en que proporciones esta cada grupo en la poblacion, todo en tiempo real segun va evolucionando la situacion en la poblacion. Ademas consta de unos deslizadores que permiten modificar, tambien en tiempo real, los valores iniciales que inciden en el brote del virus, como la probabilidad de contagio afectada por la toma de medidas preventivas como el uso de tapabocas o el distanciamiento social. Por ultimo, el programa se encarga de dividir por color, los diferentes grupos que va componiendo a la poblacion.
