@@ -127,7 +127,7 @@ class Slider():
         self.button_rect.move_ip(self.xpos, self.ypos)  # esto mueve el boton a la posicion que le corresponde en la pantalla
 
         # esta seccion dibuja todo en la pantalla
-        ax.blit(surf, (self.xpos, self.ypos))
+        pantalla.blit(surf, (self.xpos, self.ypos))
 
     def move(self):
         """
@@ -157,7 +157,7 @@ def infeccion():
     for inf in contagiadosvisibles+contagiadosnovisibles:
         for san in reversed(sanos):
            if ((inf.x-san.x)**2+(inf.y-san.y)**2)**0.5<radiocontagio :
-               if random.randint(1,100)<=100*ProbabilidadDeContagio:
+               if random.randint(1,100)<=100*(ProbabilidadDeContagio.val):
                   san.TiempoDeContagio=pygame.time.get_ticks()
                   if random.randint(1,100)<=100*porcentajeasimptomatico: 
                     san.color=(255,255,40)
@@ -270,7 +270,7 @@ def finalizar():             # revisar si se debe finalizar la simulación
     
    
 
-    pygame.pantalla.flip()
+    pygame.display.flip()
     FPS.tick(velocidad.val)
 
 
